@@ -5,6 +5,7 @@ use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\ProductStockController;
 use App\Http\Controllers\API\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -75,5 +76,9 @@ Route::get('/orders/{id}', [OrderController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+
+
+// Route for creating product stock
+Route::post('/product-stocks', [ProductStockController::class, 'store']);
 
 

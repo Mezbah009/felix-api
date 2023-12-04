@@ -31,6 +31,7 @@ class ColorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'nameBn' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +40,7 @@ class ColorController extends Controller
 
         $color = Color::create([
             'name' => $request->input('name'),
+            'nameBn' => $request->input('nameBn'),
         ]);
 
         return response()->json(['message' => 'Color created successfully', 'color' => $color], 201);
@@ -48,6 +50,7 @@ class ColorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'nameBn' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -62,6 +65,7 @@ class ColorController extends Controller
 
         $color->update([
             'name' => $request->input('name'),
+            'nameBn' => $request->input('nameBn'),
         ]);
 
         return response()->json(['message' => 'Color updated successfully', 'color' => $color], 200);

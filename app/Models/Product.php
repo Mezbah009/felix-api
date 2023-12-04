@@ -30,4 +30,9 @@ class Product extends Model
     {
         return $this->belongsTo(Color::class);
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(ProductStock::class);
+    }
 }
