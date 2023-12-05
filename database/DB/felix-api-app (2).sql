@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2023 at 03:02 PM
+-- Generation Time: Dec 05, 2023 at 12:23 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,20 +31,21 @@ CREATE TABLE `colors` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `nameBn` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `colors`
 --
 
-INSERT INTO `colors` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Black', '2023-12-02 01:22:49', '2023-12-02 01:22:49'),
-(2, 'Red', '2023-12-02 01:49:11', '2023-12-02 01:49:11'),
-(3, 'Blue', '2023-12-02 01:50:09', '2023-12-02 01:50:09'),
-(4, 'Green', '2023-12-02 01:50:24', '2023-12-02 01:50:24'),
-(6, 'Gray', '2023-12-02 01:56:34', '2023-12-02 01:56:34'),
-(7, '1', '2023-12-02 03:18:48', '2023-12-02 03:18:48');
+INSERT INTO `colors` (`id`, `name`, `created_at`, `updated_at`, `nameBn`) VALUES
+(1, 'Block', '2023-12-05 04:48:09', '2023-12-05 04:48:09', NULL),
+(2, 'Red', '2023-12-05 04:48:26', '2023-12-05 04:48:26', NULL),
+(3, 'Blue', '2023-12-05 04:48:42', '2023-12-05 04:48:42', NULL),
+(4, 'Gray', '2023-12-05 04:48:52', '2023-12-05 04:48:52', NULL),
+(5, 'Green', '2023-12-05 04:49:01', '2023-12-05 04:49:01', NULL),
+(6, 'Black', '2023-12-05 04:52:45', '2023-12-05 04:52:45', NULL);
 
 -- --------------------------------------------------------
 
@@ -67,10 +68,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `mobile`, `email`, `name`, `address`, `created_at`, `updated_at`) VALUES
-(1, '01722734209', 'hmezbah@gmail.com', 'Mezbah', 'Dhaka', '2023-12-02 04:16:55', '2023-12-02 04:16:55'),
-(2, '01722734208', 'hmezbah8@gmail.com', 'Mezbah8', 'Dhaka', '2023-12-02 04:17:17', '2023-12-02 04:17:17'),
-(3, '01722734207', 'hmezbah7@gmail.com', 'Mezbah7', 'Dhaka', '2023-12-02 04:17:29', '2023-12-02 04:17:29'),
-(4, '01722734206', NULL, 'Mezbah6', 'Dhaka', '2023-12-02 04:20:49', '2023-12-02 04:20:49');
+(1, '01722734299', 'hmezbah99@gmail.com', 'Mezbah99', 'Dhaka', '2023-12-05 04:50:33', '2023-12-05 04:50:33'),
+(2, '01722734288', 'hmezbah88@gmail.com', 'Mezbah88', 'Dhaka', '2023-12-05 04:50:51', '2023-12-05 04:50:51'),
+(3, '01722734277', 'hmezbah77@gmail.com', 'Mezbah77', 'Dhaka', '2023-12-05 04:51:10', '2023-12-05 04:51:10');
 
 -- --------------------------------------------------------
 
@@ -105,17 +105,19 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2023_11_30_103430_alter_users_table', 1),
-(6, '2023_11_30_110629_alert_users_table', 2),
-(7, '2023_11_30_123814_create_units_table', 3),
-(11, '2023_12_02_072037_create_colors_table', 4),
-(13, '2023_12_02_090341_create_products_table', 5),
-(14, '2023_12_02_095652_create_customers_table', 6),
-(16, '2023_12_02_134521_create_orders_table', 7);
+(31, '2014_10_12_000000_create_users_table', 1),
+(32, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+(33, '2019_08_19_000000_create_failed_jobs_table', 1),
+(34, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(35, '2023_11_30_103430_alter_users_table', 1),
+(36, '2023_11_30_110629_alert_users_table', 1),
+(37, '2023_11_30_123814_create_units_table', 1),
+(38, '2023_12_02_072037_create_colors_table', 1),
+(39, '2023_12_02_090341_create_products_table', 1),
+(40, '2023_12_02_095652_create_customers_table', 1),
+(42, '2023_12_03_103308_create_product_stocks_table', 1),
+(43, '2023_12_03_120917_alter_colors_table', 1),
+(44, '2023_12_05_102956_create_orders_table', 2);
 
 -- --------------------------------------------------------
 
@@ -125,8 +127,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `customer_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `product_id` bigint(20) UNSIGNED DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `shipping_charge` double DEFAULT NULL,
   `total_price` double(10,2) NOT NULL,
@@ -135,6 +137,14 @@ CREATE TABLE `orders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer_id`, `product_id`, `quantity`, `shipping_charge`, `total_price`, `status`, `payment_status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 50, 500.00, 'Pending', 'Unpaid', '2023-12-05 04:57:20', '2023-12-05 04:57:20'),
+(2, 1, 2, 2, 50, 100.00, 'Pending', 'Unpaid', '2023-12-05 04:58:26', '2023-12-05 04:58:26');
 
 -- --------------------------------------------------------
 
@@ -172,12 +182,10 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\User', 1, 'MyApp', '2605330dd1a102fd263e9fe6bd63241cbd1452ff8e8efb7cc0b319b5aafab7a5', '[\"*\"]', NULL, NULL, '2023-11-30 05:46:09', '2023-11-30 05:46:09'),
-(2, 'App\\Models\\User', 1, 'MyApp', 'c7c81f8597559d3665c16698060ea39d89a0264e218bb3a14a1d7b9b1d07da3e', '[\"*\"]', NULL, NULL, '2023-11-30 05:47:33', '2023-11-30 05:47:33'),
-(3, 'App\\Models\\User', 1, 'MyApp', '1e9dbed16735ac718f62a62ac90c20372ac652b5c18cd6dea1b73e6b633e59e2', '[\"*\"]', NULL, NULL, '2023-11-30 06:04:38', '2023-11-30 06:04:38'),
-(4, 'App\\Models\\User', 2, 'MyApp', 'a74e61f1271d431f49ce72a0cd69b1732432c07b4cdce120e816dc221f8714df', '[\"*\"]', NULL, NULL, '2023-11-30 06:06:51', '2023-11-30 06:06:51'),
-(5, 'App\\Models\\User', 1, 'MyApp', 'f7496cdc53f528779a34b6e9f99325f20d0cd7d566bfe98176463e01a1d350c9', '[\"*\"]', '2023-11-30 06:29:13', NULL, '2023-11-30 06:07:24', '2023-11-30 06:29:13'),
-(6, 'App\\Models\\User', 1, 'MyApp', '79fb371a291caa86a523985f731c8cca3fd779abe815f7673bcec980ea8b0157', '[\"*\"]', NULL, NULL, '2023-12-01 23:10:30', '2023-12-01 23:10:30');
+(1, 'App\\Models\\User', 1, 'MyApp', '15422a57056611bea90a0c27debe733b7887cec2df835f8d69a4987854ba1cda', '[\"*\"]', NULL, NULL, '2023-12-05 04:40:50', '2023-12-05 04:40:50'),
+(2, 'App\\Models\\User', 2, 'MyApp', 'a6a2bfd892ef7507df51bf3e44e7907b08b4d7d455d2ab1875d1e2446cee93e2', '[\"*\"]', NULL, NULL, '2023-12-05 04:41:13', '2023-12-05 04:41:13'),
+(3, 'App\\Models\\User', 3, 'MyApp', '60d8350d9664d5cdd1e694d57b272557dee1799c181443530454c81933976be6', '[\"*\"]', NULL, NULL, '2023-12-05 04:41:26', '2023-12-05 04:41:26'),
+(4, 'App\\Models\\User', 1, 'MyApp', 'feff4f883a4662686a68e5afa4e66fad1a0974e75ade36ef5bace6aeb4f993a7', '[\"*\"]', NULL, NULL, '2023-12-05 04:49:21', '2023-12-05 04:49:21');
 
 -- --------------------------------------------------------
 
@@ -204,9 +212,38 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `title`, `barcode`, `qty`, `size`, `type`, `price`, `unit_id`, `color_id`, `created_at`, `updated_at`) VALUES
-(1, 'Book', '1234', 20, NULL, 'solid', 500.00, 6, 7, '2023-12-02 03:18:48', '2023-12-02 03:18:48'),
-(3, 'Shirt', '1236', 50, NULL, 'solid', 1500.00, 1, 1, '2023-12-02 03:26:49', '2023-12-02 03:26:49'),
-(4, 'Dress', '1236', 50, NULL, 'solid', 1000.00, 1, 1, '2023-12-02 03:30:18', '2023-12-02 03:30:18');
+(1, 'jama', '1335', 40, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:52:45', '2023-12-05 04:54:22'),
+(2, 'Shirt', '1234', 50, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:16', '2023-12-05 04:53:16'),
+(3, 'Mobile', '1235', 50, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:43', '2023-12-05 04:53:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_stocks`
+--
+
+CREATE TABLE `product_stocks` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `action` enum('increase','decrease') NOT NULL,
+  `qty` int(11) NOT NULL,
+  `stock_date` date NOT NULL,
+  `purchase_date` date NOT NULL,
+  `purchase_no` varchar(255) NOT NULL,
+  `sales_invoice_no` varchar(255) NOT NULL,
+  `remarks` varchar(255) DEFAULT NULL,
+  `supplier_name` varchar(255) NOT NULL,
+  `chalan_no` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_stocks`
+--
+
+INSERT INTO `product_stocks` (`id`, `product_id`, `action`, `qty`, `stock_date`, `purchase_date`, `purchase_no`, `sales_invoice_no`, `remarks`, `supplier_name`, `chalan_no`, `created_at`, `updated_at`) VALUES
+(1, 1, 'increase', 20, '2004-12-23', '2004-12-23', '1111', '111', 'Book', 'panjeri', '222', '2023-12-05 04:54:22', '2023-12-05 04:54:22');
 
 -- --------------------------------------------------------
 
@@ -227,11 +264,15 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `name`, `nameBn`, `created_at`, `updated_at`) VALUES
-(1, 'Amount', NULL, '2023-12-01 23:16:21', '2023-12-02 00:08:34'),
-(2, 'Bottle', NULL, '2023-12-01 23:17:24', '2023-12-01 23:17:24'),
-(4, 'feet', NULL, '2023-12-01 23:17:56', '2023-12-01 23:17:56'),
-(5, 'Kg', NULL, '2023-12-01 23:18:28', '2023-12-01 23:18:28'),
-(6, '1', NULL, '2023-12-02 03:18:48', '2023-12-02 03:18:48');
+(1, 'Amount', NULL, '2023-12-05 04:44:11', '2023-12-05 04:44:11'),
+(2, 'Bottle', NULL, '2023-12-05 04:44:40', '2023-12-05 04:44:40'),
+(3, 'Box', NULL, '2023-12-05 04:44:55', '2023-12-05 04:44:55'),
+(4, 'Feet', NULL, '2023-12-05 04:45:12', '2023-12-05 04:45:12'),
+(5, 'Kg', NULL, '2023-12-05 04:45:23', '2023-12-05 04:45:23'),
+(6, 'Km', NULL, '2023-12-05 04:45:33', '2023-12-05 04:45:33'),
+(7, 'Ltr', NULL, '2023-12-05 04:45:44', '2023-12-05 04:45:44'),
+(8, 'Meter', NULL, '2023-12-05 04:45:55', '2023-12-05 04:45:55'),
+(9, 'Tk', NULL, '2023-12-05 04:46:15', '2023-12-05 04:46:15');
 
 -- --------------------------------------------------------
 
@@ -257,8 +298,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `mobile`, `store`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `address`) VALUES
-(1, 'Mezbah', '01722734209', 'Bismillah', NULL, '$2y$12$oNE/8GawGt40vrAKU4ArsOI06Uo89jI0/ccCDdVUb2ekszqp7018O', NULL, '2023-11-30 05:46:09', '2023-11-30 05:46:09', 'Dhaka'),
-(2, 'Mezbah', '01722734208', 'Bismillah', NULL, '$2y$12$SmBOtLn59lBAE7P1E.pHWu0KqBntERi9rNDW015TSqz496Y6q3eQa', NULL, '2023-11-30 06:06:51', '2023-11-30 06:06:51', 'Dhaka');
+(1, 'Mezbah', '01722734209', 'Bismillah', NULL, '$2y$12$/rlYXD7IXJOkhe./JKgsXuZDqZnXfzL2s9KY63ak3jfrQLqzVBaPy', NULL, '2023-12-05 04:40:50', '2023-12-05 04:40:50', 'Dhaka'),
+(2, 'Mezbah8', '01722734208', 'Bismillah8', NULL, '$2y$12$uRFRZlQXGqrC6i67hI9M1eSOWphp3YQGSRQR9OGXmb3g/QTsNFpQy', NULL, '2023-12-05 04:41:12', '2023-12-05 04:41:12', 'Dhaka'),
+(3, 'Mezbah7', '01722734207', 'Bismillah7', NULL, '$2y$12$WKaaQ81GLngLK9/UDehgJeKZJElShFhXlJW4CKiQ3C0/f31de4uAG', NULL, '2023-12-05 04:41:26', '2023-12-05 04:41:26', 'Dhaka');
 
 --
 -- Indexes for dumped tables
@@ -322,6 +364,13 @@ ALTER TABLE `products`
   ADD KEY `products_color_id_foreign` (`color_id`);
 
 --
+-- Indexes for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_stocks_product_id_foreign` (`product_id`);
+
+--
 -- Indexes for table `units`
 --
 ALTER TABLE `units`
@@ -342,13 +391,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `colors`
 --
 ALTER TABLE `colors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -360,37 +409,43 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -409,6 +464,12 @@ ALTER TABLE `orders`
 ALTER TABLE `products`
   ADD CONSTRAINT `products_color_id_foreign` FOREIGN KEY (`color_id`) REFERENCES `colors` (`id`),
   ADD CONSTRAINT `products_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`);
+
+--
+-- Constraints for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  ADD CONSTRAINT `product_stocks_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
