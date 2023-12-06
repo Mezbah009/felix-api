@@ -17,7 +17,7 @@ class ProductStockController extends Controller
             'action' => 'required|in:increase,decrease',
             'qty' => 'required|integer',
             'stock_date' => 'required|date',
-            'purchase_date' => 'required|date',
+            'purchase_rate' => 'required|string',
             'purchase_no' => 'required|string',
             'sales_invoice_no' => 'required|string',
             'remarks' => 'nullable|string',

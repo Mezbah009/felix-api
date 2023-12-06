@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +16,7 @@ class CustomerController extends Controller
     {
         $customers = Customer::all();
 
-        return response()->json($customers, 200);
+        return response()->json(['data' => $customers], 200);
     }
 
     public function show($id)
@@ -25,7 +27,7 @@ class CustomerController extends Controller
             return response()->json(['message' => 'Customer not found'], 404);
         }
 
-        return response()->json(['customer' => $customer], 200);
+        return response()->json(['data' => $customer], 200);
     }
 
     public function store(Request $request)
@@ -43,7 +45,7 @@ class CustomerController extends Controller
 
         $customer = Customer::create($request->all());
 
-        return response()->json(['message' => 'Customer created successfully', 'customer' => $customer], 201);
+        return response()->json(['message' => 'Customer created successfully', 'data' => $customer], 201);
     }
 
     public function update(Request $request, $id)
@@ -70,7 +72,7 @@ class CustomerController extends Controller
 
         $customer->update($request->all());
 
-        return response()->json(['message' => 'Customer updated successfully', 'customer' => $customer], 200);
+        return response()->json(['message' => 'Customer updated successfully', 'data' => $customer], 200);
     }
 
     public function destroy($id)
@@ -87,23 +89,27 @@ class CustomerController extends Controller
     }
 
 
+    // ... (other methods)
 
-
-
-
-    //search
     public function searchByMobile(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'mobile' => 'required|exists:customers,mobile',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|string',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 400);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $mobile = $request->input('mobile');
+
+        $customer = Customer::where('mobile', $mobile)->first();
+
+        if ($customer) {
+            return response()->json(['data' => $customer]);
+        } else {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
     }
 
-    $customer = Customer::where('mobile', $request->input('mobile'))->first();
-
-    return response()->json(['customer' => $customer], 200);
-}
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('action', ['increase', 'decrease']);
             $table->integer('qty');
             $table->date('stock_date');
-            $table->date('purchase_date');
+            $table->string('purchase_rate');
             $table->string('purchase_no');
             $table->string('sales_invoice_no');
             $table->string('remarks')->nullable();

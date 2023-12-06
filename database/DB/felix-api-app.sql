@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2023 at 12:23 PM
+-- Generation Time: Dec 06, 2023 at 01:49 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -70,7 +70,8 @@ CREATE TABLE `customers` (
 INSERT INTO `customers` (`id`, `mobile`, `email`, `name`, `address`, `created_at`, `updated_at`) VALUES
 (1, '01722734299', 'hmezbah99@gmail.com', 'Mezbah99', 'Dhaka', '2023-12-05 04:50:33', '2023-12-05 04:50:33'),
 (2, '01722734288', 'hmezbah88@gmail.com', 'Mezbah88', 'Dhaka', '2023-12-05 04:50:51', '2023-12-05 04:50:51'),
-(3, '01722734277', 'hmezbah77@gmail.com', 'Mezbah77', 'Dhaka', '2023-12-05 04:51:10', '2023-12-05 04:51:10');
+(3, '01722734277', 'hmezbah77@gmail.com', 'Mezbah77', 'Dhaka', '2023-12-05 04:51:10', '2023-12-05 04:51:10'),
+(4, '01722734209', 'hmezbah@gmail.com', 'Mezbah', 'Dhaka', '2023-12-06 00:30:55', '2023-12-06 00:30:55');
 
 -- --------------------------------------------------------
 
@@ -115,9 +116,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (38, '2023_12_02_072037_create_colors_table', 1),
 (39, '2023_12_02_090341_create_products_table', 1),
 (40, '2023_12_02_095652_create_customers_table', 1),
-(42, '2023_12_03_103308_create_product_stocks_table', 1),
 (43, '2023_12_03_120917_alter_colors_table', 1),
-(44, '2023_12_05_102956_create_orders_table', 2);
+(46, '2023_12_06_091850_create_product_stocks_table', 3),
+(47, '2023_12_06_115337_create_orders_table', 4);
 
 -- --------------------------------------------------------
 
@@ -128,12 +129,19 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `customer_name` varchar(255) DEFAULT NULL,
+  `customer_mobile` varchar(255) DEFAULT NULL,
+  `customer_address` varchar(255) DEFAULT NULL,
   `product_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `product_price` double(10,2) DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `shipping_charge` double DEFAULT NULL,
   `total_price` double(10,2) NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'Pending',
-  `payment_status` varchar(255) NOT NULL DEFAULT 'Unpaid',
+  `payment_status` enum('Paid','Unpaid') NOT NULL DEFAULT 'Unpaid',
+  `current_status` enum('Pending','Packing','Delivery','Delivered','Canceled') NOT NULL DEFAULT 'Pending',
+  `pay_now_qr` varchar(255) DEFAULT NULL,
+  `customer_sms` varchar(255) DEFAULT NULL,
+  `rider_sms` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -142,9 +150,9 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_id`, `product_id`, `quantity`, `shipping_charge`, `total_price`, `status`, `payment_status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 50, 500.00, 'Pending', 'Unpaid', '2023-12-05 04:57:20', '2023-12-05 04:57:20'),
-(2, 1, 2, 2, 50, 100.00, 'Pending', 'Unpaid', '2023-12-05 04:58:26', '2023-12-05 04:58:26');
+INSERT INTO `orders` (`id`, `customer_id`, `customer_name`, `customer_mobile`, `customer_address`, `product_id`, `product_price`, `quantity`, `shipping_charge`, `total_price`, `payment_status`, `current_status`, `pay_now_qr`, `customer_sms`, `rider_sms`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Mezbah99', '01722734299', 'Dhaka', 1, 2000.00, 1, 100, 2100.00, 'Paid', 'Packing', NULL, NULL, NULL, '2023-12-06 06:10:58', '2023-12-06 06:36:24'),
+(2, 2, 'Mezbah99', '01722734299', 'Dhaka', 2, 2000.00, 1, NULL, 2000.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-06 06:12:51', '2023-12-06 06:12:51');
 
 -- --------------------------------------------------------
 
@@ -212,8 +220,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `title`, `barcode`, `qty`, `size`, `type`, `price`, `unit_id`, `color_id`, `created_at`, `updated_at`) VALUES
-(1, 'jama', '1335', 40, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:52:45', '2023-12-05 04:54:22'),
-(2, 'Shirt', '1234', 50, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:16', '2023-12-05 04:53:16'),
+(1, 'jama', '1335', 150, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:52:45', '2023-12-06 03:24:55'),
+(2, 'Shirt', '1234', 60, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:16', '2023-12-06 03:01:40'),
 (3, 'Mobile', '1235', 50, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:43', '2023-12-05 04:53:43');
 
 -- --------------------------------------------------------
@@ -228,7 +236,7 @@ CREATE TABLE `product_stocks` (
   `action` enum('increase','decrease') NOT NULL,
   `qty` int(11) NOT NULL,
   `stock_date` date NOT NULL,
-  `purchase_date` date NOT NULL,
+  `purchase_rate` varchar(255) NOT NULL,
   `purchase_no` varchar(255) NOT NULL,
   `sales_invoice_no` varchar(255) NOT NULL,
   `remarks` varchar(255) DEFAULT NULL,
@@ -242,8 +250,10 @@ CREATE TABLE `product_stocks` (
 -- Dumping data for table `product_stocks`
 --
 
-INSERT INTO `product_stocks` (`id`, `product_id`, `action`, `qty`, `stock_date`, `purchase_date`, `purchase_no`, `sales_invoice_no`, `remarks`, `supplier_name`, `chalan_no`, `created_at`, `updated_at`) VALUES
-(1, 1, 'increase', 20, '2004-12-23', '2004-12-23', '1111', '111', 'Book', 'panjeri', '222', '2023-12-05 04:54:22', '2023-12-05 04:54:22');
+INSERT INTO `product_stocks` (`id`, `product_id`, `action`, `qty`, `stock_date`, `purchase_rate`, `purchase_no`, `sales_invoice_no`, `remarks`, `supplier_name`, `chalan_no`, `created_at`, `updated_at`) VALUES
+(1, 1, 'increase', 10, '2006-12-23', '200', '1111', '111', 'Book', 'panjeri', '222', '2023-12-06 03:24:19', '2023-12-06 03:24:19'),
+(2, 1, 'increase', 50, '2006-12-23', '200', '1111', '111', 'Book', 'panjeri', '222', '2023-12-06 03:24:40', '2023-12-06 03:24:40'),
+(3, 1, 'increase', 50, '2006-12-23', '200', '1111', '111', 'Book', 'panjeri', '222', '2023-12-06 03:24:55', '2023-12-06 03:24:55');
 
 -- --------------------------------------------------------
 
@@ -397,7 +407,7 @@ ALTER TABLE `colors`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -409,7 +419,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -433,7 +443,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_stocks`
 --
 ALTER TABLE `product_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `units`

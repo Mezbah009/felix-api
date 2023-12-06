@@ -8,7 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['customer_id', 'product_id', 'quantity', 'shipping_charge', 'total_price', 'status', 'payment_status'];
+    protected $fillable = [
+        'customer_id',
+        'customer_name',
+        'customer_mobile',
+        'customer_address',
+        'product_id',
+        'product_price',
+        'quantity',
+        'shipping_charge',
+        'total_price',
+        'payment_status',
+        'current_status',
+        'pay_now_qr',
+        'customer_sms',
+        'rider_sms',
+    ];
+
+    protected $casts = [
+        'product_price' => 'decimal:2',
+        'shipping_charge' => 'decimal:2',
+        'total_price' => 'decimal:2',
+    ];
+
+    // Relationships
 
     public function customer()
     {

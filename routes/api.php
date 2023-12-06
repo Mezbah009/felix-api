@@ -67,7 +67,29 @@ Route::post('/customers', [CustomerController::class, 'store']);
 Route::put('/customers/{id}', [CustomerController::class, 'update']);
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
 
-Route::get('/customers/search', [CustomerController::class, 'searchByMobile']);
+// New route for customer search by mobile
+Route::get('/customer/search', [CustomerController::class, 'searchByMobile']);
+
+
+// Order routes
+// Route::get('/orders', [OrderController::class, 'index']);
+// Route::get('/orders/{id}', [OrderController::class, 'show']);
+// Route::post('/orders', [OrderController::class, 'store']);
+// Route::put('/orders/{id}', [OrderController::class, 'update']);
+// Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+
+// New route for getting order history by date
+Route::get('/order-history-by-date', [OrderController::class, 'getOrderHistoryByDate']);
+
+// New routes for individual updates
+Route::put('/orders/{id}/update-payment-status', [OrderController::class, 'updatePaymentStatus']);
+Route::put('/orders/{id}/update-status', [OrderController::class, 'updateStatus']);
+
+
+// Route for creating product stock
+Route::post('/product-stocks', [ProductStockController::class, 'store']);
+
+
 
 
 // Order routes
@@ -77,8 +99,9 @@ Route::post('/orders', [OrderController::class, 'store']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
+// Additional routes for your specific requirements
 
-// Route for creating product stock
-Route::post('/product-stocks', [ProductStockController::class, 'store']);
+// For example, a route to search orders by customer ID
+Route::get('/order/search', [OrderController::class, 'searchByCustomerId']);
 
 
