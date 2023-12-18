@@ -21,7 +21,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id);
+        $order = Order::with('orderItems.product')->find($id);
 
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -58,7 +58,7 @@ class OrderController extends Controller
             $orderItem->price = $product['price'];
             $order->orderItems()->save($orderItem);
         }
-      
+
         return response()->json(['message' => 'Order created successfully', 'data' => $order], 201);
     }
 
@@ -99,7 +99,7 @@ class OrderController extends Controller
         $rules = [
             // Add your validation rules here based on your requirements
             'customer_id' => 'nullable|exists:customers,id',
-            'customer_name' => 'nullable|string',
+'customer_name' => 'nullable|string',
             'customer_mobile' => 'nullable|string',
             'customer_address' => 'nullable|string',
             'shipping_charge' => 'nullable|numeric',
