@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -13,11 +14,9 @@ class Order extends Model
         'customer_name',
         'customer_mobile',
         'customer_address',
-        'product_id',
-        'product_price',
-        'quantity',
         'shipping_charge',
         'total_price',
+        'order_amount',
         'payment_status',
         'current_status',
         'pay_now_qr',
@@ -26,7 +25,6 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'product_price' => 'decimal:2',
         'shipping_charge' => 'decimal:2',
         'total_price' => 'decimal:2',
     ];
@@ -38,8 +36,8 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function product()
+    public function orderItems(): HasMany
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(OrderItem::class);
     }
 }
