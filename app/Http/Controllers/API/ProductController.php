@@ -7,32 +7,34 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
     public function index()
-    {
-        $products = Product::all();
+{
+    $products = Product::all();
+    return response()->json(['data' => $products], 200);
+}
 
-        return response()->json($products, 200);
-    }
+
 
     public function show($id)
-    {
-        $product = Product::find($id);
+{
+    $product = Product::find($id);
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        return response()->json(['product' => $product], 200);
+    if (!$product) {
+        return response()->json(['message' => 'Product not found'], 404);
     }
 
+    return response()->json(['data' => $product], 200);
+}
 
 
 
-    public function store(Request $request)
+
+public function store(Request $request)
 {
     $validator = Validator::make($request->all(), [
         'title' => 'required|string',
@@ -43,6 +45,7 @@ class ProductController extends Controller
         'size' => 'nullable|string',
         'type' => 'nullable|string',
         'price' => 'required|numeric',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
     if ($validator->fails()) {
@@ -50,6 +53,14 @@ class ProductController extends Controller
     }
 
     $productData = $request->all();
+
+    // Process image if provided
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('public/images', $imageName); // Save to storage/images directory
+        $productData['image'] = asset("storage/images/{$imageName}");
+    }
 
     // Find or create unit based on the provided name
     $unit = Unit::firstOrCreate(['name' => $request->input('unit_name')]);
@@ -66,30 +77,43 @@ class ProductController extends Controller
     return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
 }
 
+
+
+
+
 public function update(Request $request, $id)
 {
-    $validator = Validator::make($request->all(), [
-        'title' => 'required|string',
-        'barcode' => 'required|string',
-        'qty' => 'nullable|integer',
-        'unit_name' => 'nullable|string',
-        'color_name' => 'nullable|string',
-        'size' => 'nullable|string',
-        'type' => 'nullable|string',
-        'price' => 'required|numeric',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 400);
-    }
-
     $product = Product::find($id);
 
     if (!$product) {
         return response()->json(['message' => 'Product not found'], 404);
     }
 
+    $validator = Validator::make($request->all(), [
+        'title' => 'string',
+        'barcode' => 'string',
+        'qty' => 'nullable|integer',
+        'unit_name' => 'nullable|string',
+        'color_name' => 'nullable|string',
+        'size' => 'nullable|string',
+        'type' => 'nullable|string',
+        'price' => 'numeric',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
     $productData = $request->all();
+
+    // Process image if provided
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('public/images', $imageName); // Save to storage/images directory
+        $productData['image'] = asset("storage/images/{$imageName}");
+    }
 
     // Find or create unit based on the provided name
     $unit = Unit::firstOrCreate(['name' => $request->input('unit_name')]);
@@ -110,17 +134,21 @@ public function update(Request $request, $id)
 
 
 
-    //delete
     public function destroy($id)
-    {
-        $product = Product::find($id);
+{
+    $product = Product::find($id);
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        $product->delete();
-
-        return response()->json(['message' => 'Product deleted successfully'], 200);
+    if (!$product) {
+        return response()->json(['message' => 'Product not found'], 404);
     }
+
+    // Delete associated image file if it exists
+    if ($product->image) {
+        Storage::delete('public/images/' . $product->image);
+    }
+
+    $product->delete();
+
+    return response()->json(['message' => 'Product deleted successfully'], 200);
+}
 }

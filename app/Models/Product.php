@@ -20,6 +20,7 @@ class Product extends Model
         'size',
         'type',
         'price',
+        'image',
     ];
 
     public function unit()

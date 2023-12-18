@@ -8,8 +8,6 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -23,14 +21,13 @@ return new class extends Migration
             $table->double('price', 10, 2);
             $table->foreignId('unit_id')->nullable()->constrained('units');
             $table->foreignId('color_id')->nullable()->constrained('colors');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {
