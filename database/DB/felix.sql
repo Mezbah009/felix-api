@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2023 at 01:49 PM
+-- Generation Time: Dec 18, 2023 at 01:12 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `felix-api-app`
+-- Database: `felix-test`
 --
 
 -- --------------------------------------------------------
@@ -114,11 +114,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (36, '2023_11_30_110629_alert_users_table', 1),
 (37, '2023_11_30_123814_create_units_table', 1),
 (38, '2023_12_02_072037_create_colors_table', 1),
-(39, '2023_12_02_090341_create_products_table', 1),
 (40, '2023_12_02_095652_create_customers_table', 1),
 (43, '2023_12_03_120917_alter_colors_table', 1),
 (46, '2023_12_06_091850_create_product_stocks_table', 3),
-(47, '2023_12_06_115337_create_orders_table', 4);
+(48, '2023_12_06_115337_create_orders_table', 4),
+(49, '2023_12_18_054852_create_order_item_table', 4),
+(50, '2023_12_18_104135_create_products_table', 5);
 
 -- --------------------------------------------------------
 
@@ -129,19 +130,17 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `customer_name` varchar(255) DEFAULT NULL,
-  `customer_mobile` varchar(255) DEFAULT NULL,
-  `customer_address` varchar(255) DEFAULT NULL,
-  `product_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `product_price` double(10,2) DEFAULT NULL,
-  `quantity` int(11) NOT NULL,
+  `customer_name` varchar(191) DEFAULT NULL,
+  `customer_mobile` varchar(191) DEFAULT NULL,
+  `customer_address` varchar(191) DEFAULT NULL,
   `shipping_charge` double DEFAULT NULL,
+  `order_amount` double(10,2) NOT NULL,
   `total_price` double(10,2) NOT NULL,
   `payment_status` enum('Paid','Unpaid') NOT NULL DEFAULT 'Unpaid',
   `current_status` enum('Pending','Packing','Delivery','Delivered','Canceled') NOT NULL DEFAULT 'Pending',
-  `pay_now_qr` varchar(255) DEFAULT NULL,
-  `customer_sms` varchar(255) DEFAULT NULL,
-  `rider_sms` varchar(255) DEFAULT NULL,
+  `pay_now_qr` varchar(191) DEFAULT NULL,
+  `customer_sms` varchar(191) DEFAULT NULL,
+  `rider_sms` varchar(191) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -150,9 +149,41 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_id`, `customer_name`, `customer_mobile`, `customer_address`, `product_id`, `product_price`, `quantity`, `shipping_charge`, `total_price`, `payment_status`, `current_status`, `pay_now_qr`, `customer_sms`, `rider_sms`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Mezbah99', '01722734299', 'Dhaka', 1, 2000.00, 1, 100, 2100.00, 'Paid', 'Packing', NULL, NULL, NULL, '2023-12-06 06:10:58', '2023-12-06 06:36:24'),
-(2, 2, 'Mezbah99', '01722734299', 'Dhaka', 2, 2000.00, 1, NULL, 2000.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-06 06:12:51', '2023-12-06 06:12:51');
+INSERT INTO `orders` (`id`, `customer_id`, `customer_name`, `customer_mobile`, `customer_address`, `shipping_charge`, `order_amount`, `total_price`, `payment_status`, `current_status`, `pay_now_qr`, `customer_sms`, `rider_sms`, `created_at`, `updated_at`) VALUES
+(1, NULL, NULL, NULL, NULL, 50, 6000.00, 6050.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-18 02:41:14', '2023-12-18 02:41:14'),
+(2, 1, NULL, NULL, NULL, 50, 6000.00, 6050.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-18 02:51:01', '2023-12-18 02:51:01'),
+(3, 1, NULL, NULL, NULL, 50, 8000.00, 8050.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-18 02:51:12', '2023-12-18 02:51:12'),
+(4, 1, NULL, NULL, NULL, 50, 26000.00, 26050.00, 'Unpaid', 'Pending', NULL, NULL, NULL, '2023-12-18 04:46:21', '2023-12-18 04:46:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `price` double(10,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `price`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 2000.00, 2, '2023-12-18 02:41:14', '2023-12-18 02:41:14'),
+(2, 1, 2, 2000.00, 1, '2023-12-18 02:41:14', '2023-12-18 02:41:14'),
+(3, 2, 1, 2000.00, 2, '2023-12-18 02:51:01', '2023-12-18 02:51:01'),
+(4, 2, 2, 2000.00, 1, '2023-12-18 02:51:01', '2023-12-18 02:51:01'),
+(5, 3, 1, 2000.00, 3, '2023-12-18 02:51:12', '2023-12-18 02:51:12'),
+(6, 3, 2, 2000.00, 1, '2023-12-18 02:51:12', '2023-12-18 02:51:12'),
+(7, 4, 1, 2000.00, 3, '2023-12-18 04:46:21', '2023-12-18 04:46:21'),
+(8, 4, 2, 20000.00, 1, '2023-12-18 04:46:21', '2023-12-18 04:46:21');
 
 -- --------------------------------------------------------
 
@@ -203,14 +234,15 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 
 CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `barcode` varchar(255) NOT NULL,
+  `title` varchar(191) NOT NULL,
+  `barcode` varchar(191) NOT NULL,
   `qty` int(11) DEFAULT NULL,
-  `size` varchar(255) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
+  `size` varchar(191) DEFAULT NULL,
+  `type` varchar(191) DEFAULT NULL,
   `price` double(10,2) NOT NULL,
   `unit_id` bigint(20) UNSIGNED DEFAULT NULL,
   `color_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `image` varchar(191) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -219,10 +251,19 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `title`, `barcode`, `qty`, `size`, `type`, `price`, `unit_id`, `color_id`, `created_at`, `updated_at`) VALUES
-(1, 'jama', '1335', 150, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:52:45', '2023-12-06 03:24:55'),
-(2, 'Shirt', '1234', 60, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:16', '2023-12-06 03:01:40'),
-(3, 'Mobile', '1235', 50, 'full', 'solid', 2000.00, 1, 6, '2023-12-05 04:53:43', '2023-12-05 04:53:43');
+INSERT INTO `products` (`id`, `title`, `barcode`, `qty`, `size`, `type`, `price`, `unit_id`, `color_id`, `image`, `created_at`, `updated_at`) VALUES
+(1, 'panjabi', '1235', 50, 'full', 'solid', 2000.00, 1, 6, NULL, '2023-12-18 04:43:55', '2023-12-18 04:43:55'),
+(2, 'Mobile', '1342', 100, 'full', 'solid', 20000.00, 1, 6, NULL, '2023-12-18 04:45:04', '2023-12-18 04:45:04'),
+(3, 'Shirt', '1442', 100, 'full', 'solid', 1500.00, 1, 6, NULL, '2023-12-18 04:45:35', '2023-12-18 04:45:35'),
+(4, 'jama', '1842', 100, 'full', 'solid', 1500.00, 1, 6, NULL, '2023-12-18 04:59:01', '2023-12-18 04:59:01'),
+(5, 'jama', '1842', 100, 'full', 'solid', 1500.00, 1, 6, NULL, '2023-12-18 05:14:19', '2023-12-18 05:14:19'),
+(6, 'jama', '1842', 100, 'full', 'solid', 1500.00, 1, 6, NULL, '2023-12-18 05:15:06', '2023-12-18 05:15:06'),
+(7, 'jama', '1842', 100, 'full', 'solid', 1500.00, 1, 6, '1702898145.jpg', '2023-12-18 05:15:46', '2023-12-18 05:15:46'),
+(8, 'jama kapor', '1842', 100, 'full', 'solid', 1500.00, 1, 6, '1702901016.PNG', '2023-12-18 06:03:36', '2023-12-18 06:03:36'),
+(9, 'jama kapor', '1842', 100, 'full', 'solid', 1500.00, 1, 6, '1702901114.PNG', '2023-12-18 06:05:14', '2023-12-18 06:05:14'),
+(10, 'jama kapor', '1842', 100, 'full', 'solid', 1500.00, 1, 6, 'public/storage/images/1702901167.PNG', '2023-12-18 06:06:07', '2023-12-18 06:06:07'),
+(11, 'jama kapor', '1842', 100, 'full', 'solid', 1500.00, 1, 6, 'http://127.0.0.1:8000/storage/images/1702901203.PNG', '2023-12-18 06:06:43', '2023-12-18 06:06:43'),
+(12, 'jama kapor', '1842', 100, 'full', 'solid', 1500.00, 1, 6, 'http://127.0.0.1:8000/storage/images/1702901328.PNG', '2023-12-18 06:08:48', '2023-12-18 06:08:48');
 
 -- --------------------------------------------------------
 
@@ -348,8 +389,15 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `orders_customer_id_foreign` (`customer_id`),
-  ADD KEY `orders_product_id_foreign` (`product_id`);
+  ADD KEY `orders_customer_id_foreign` (`customer_id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_items_order_id_foreign` (`order_id`),
+  ADD KEY `order_items_product_id_foreign` (`product_id`);
 
 --
 -- Indexes for table `password_reset_tokens`
@@ -419,13 +467,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -437,7 +491,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `product_stocks`
@@ -465,8 +519,14 @@ ALTER TABLE `users`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `orders_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `orders_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `products`

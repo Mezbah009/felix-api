@@ -58,7 +58,7 @@ public function store(Request $request)
     if ($request->hasFile('image')) {
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('public/images', $imageName); // Save to storage/images directory
+        $image->move(public_path().'/storage/images/', $imageName);
         $productData['image'] = asset("storage/images/{$imageName}");
     }
 
@@ -111,7 +111,7 @@ public function update(Request $request, $id)
     if ($request->hasFile('image')) {
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('public/images', $imageName); // Save to storage/images directory
+        $image->move(public_path().'/storage/images/', $imageName);
         $productData['image'] = asset("storage/images/{$imageName}");
     }
 
