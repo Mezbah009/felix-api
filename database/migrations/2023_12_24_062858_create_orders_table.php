@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('pay_now_qr')->nullable();
             $table->string('customer_sms')->nullable();
             $table->string('rider_sms')->nullable();
+            $table->string('invoice_id')->nullable();
             $table->timestamps();
         });
     }

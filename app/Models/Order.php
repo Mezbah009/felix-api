@@ -22,6 +22,7 @@ class Order extends Model
         'pay_now_qr',
         'customer_sms',
         'rider_sms',
+        'invoice_id',
     ];
 
     protected $casts = [
@@ -40,4 +41,5 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
 }

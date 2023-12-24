@@ -45,21 +45,29 @@ public function store(Request $request)
         'size' => 'nullable|string',
         'type' => 'nullable|string',
         'price' => 'required|numeric',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
     ]);
 
     if ($validator->fails()) {
         return response()->json(['error' => $validator->errors()], 400);
     }
 
-    $productData = $request->all();
+    $productData = $request->except('image');
 
     // Process image if provided
     if ($request->hasFile('image')) {
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path().'/storage/images/', $imageName);
-        $productData['image'] = asset("storage/images/{$imageName}");
+
+
+
+
+        $image->move(public_path('storage/images'), $imageName);
+
+
+
+        $productData['image'] = "storage/images/{$imageName}";
+
     }
 
     // Find or create unit based on the provided name
@@ -76,6 +84,7 @@ public function store(Request $request)
 
     return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
 }
+
 
 
 

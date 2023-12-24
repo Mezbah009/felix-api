@@ -7,6 +7,7 @@ use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ProductStockController;
 use App\Http\Controllers\API\UnitController;
+use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -80,6 +81,7 @@ Route::get('/customer/search', [CustomerController::class, 'searchByMobile']);
 
 // New route for getting order history by date
 Route::get('/order-history-by-date', [OrderController::class, 'getOrderHistoryByDate']);
+Route::post('/order/history-by-date', [OrderController::class, 'getOrderHistoryByDate']);
 
 // New routes for individual updates
 Route::put('/orders/{id}/update-payment-status', [OrderController::class, 'updatePaymentStatus']);
@@ -103,5 +105,16 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
 // For example, a route to search orders by customer ID
 Route::get('/order/search', [OrderController::class, 'searchByCustomerId']);
+
+
+
+
+Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
+
+
+Route::get('/order/{orderId}/details', [OrderController::class, 'getOrderDetails']);
+
+
+//Route::get('/orders', [OrderController::class, 'getAllOrders']);
 
 
