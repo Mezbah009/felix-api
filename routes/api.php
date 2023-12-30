@@ -89,6 +89,8 @@ Route::put('/orders/{id}/update-status', [OrderController::class, 'updateStatus'
 
 
 // Route for creating product stock
+Route::get('/product-stocks', [ProductStockController::class, 'index']);
+Route::get('/product-stocks/{id}', [ProductStockController::class, 'show']);
 Route::post('/product-stocks', [ProductStockController::class, 'store']);
 
 

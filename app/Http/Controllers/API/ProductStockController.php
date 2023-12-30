@@ -3,12 +3,42 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProductStockController extends Controller
 {
+
+
+    public function index()
+    {
+        // Retrieve all products with their associated product stocks
+        $products = Product::with('productStocks')->get();
+
+        // Return a response with the list of products and their associated product stocks
+        return response()->json(['products' => $products], 200);
+    }
+
+
+    public function show($id)
+    {
+        // Find the Product record by its ID along with its associated product stocks
+        $product = Product::with('productStocks')->find($id);
+
+        // If the product is not found, return an error response
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Return a response with the Product record and its associated product stocks
+        return response()->json(['product' => $product], 200);
+    }
+
+
+
+
     public function store(Request $request)
     {
         // Validate the request data
